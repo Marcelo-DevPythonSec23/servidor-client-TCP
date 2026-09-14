@@ -1,106 +1,251 @@
-# TCP Server & Client
+# 🔌 TCP Server & Client
 
-Um projeto simples em Python para demonstrar a comunicação via protocolo TCP usando sockets. O servidor aceita conexões de clientes e recebe mensagens, enquanto o cliente estabelece uma conexão e envia uma requisição básica.
+[![Tests](https://img.shields.io/badge/Tests-Passing-brightgreen)](https://github.com/Marcelo-DevPythonSec23/servidor-client-TCP)
+![Python](https://img.shields.io/badge/Python-3.8+-blue)
+![License](https://img.shields.io/badge/License-MIT-green)
 
-## Objetivo
+Um projeto **profissional** em Python para comunicação TCP/IP usando sockets. Demonstra arquitetura client-server com threading, logging estruturado e tratamento robusto de erros.
 
-Este projeto foi criado para praticar e entender:
+---
 
-- sockets em Python
-- comunicação cliente-servidor
-- uso de TCP/IP
-- arquitetura básica de rede
+## 🎯 Objetivo
 
-## Tecnologias
+Este projeto foi criado para aprender e praticar:
 
-- Python 3
-- socket
-- threading
+- ✅ **Sockets em Python** (AF_INET, SOCK_STREAM)
+- ✅ **Comunicação cliente-servidor** (TCP/IP)
+- ✅ **Threading multi-cliente** (múltiplas conexões simultâneas)
+- ✅ **Logging estruturado** (arquivo + console)
+- ✅ **Tratamento de erros** (exceções, timeouts, conexões recusadas)
+- ✅ **Testes automatizados** (pytest)
+- ✅ **CI/CD** (GitHub Actions)
+- ✅ **Boas práticas** (config centralizado, .gitignore, requirements.txt)
 
-## Estrutura do projeto
+---
 
-```text
-.
-├── client.py
-├── servidor.py
-└── README.md
+## 🛠️ Tecnologias
+
+| Ferramenta | Versão | Uso |
+|---|---|---|
+| **Python** | 3.8+ | Linguagem principal |
+| **socket** | built-in | Comunicação TCP |
+| **threading** | built-in | Multi-cliente |
+| **logging** | built-in | Logging estruturado |
+| **pytest** | 7.4.3+ | Testes automatizados |
+
+---
+
+## 📁 Estrutura do Projeto
+
+```
+servidor-client-TCP/
+├── servidor.py          # Servidor TCP multi-cliente com threading
+├── client.py            # Cliente TCP com tratamento de erros
+├── config.py            # Configurações centralizadas
+├── test_tcp.py          # Suite de testes com pytest
+├── requirements.txt     # Dependências do projeto
+├── .gitignore           # Arquivos ignorados no Git
+└── README.md            # Esta documentação
 ```
 
-## Como funciona
+---
 
-### Servidor
-O arquivo `servidor.py` cria um socket TCP, escuta conexões em uma porta específica e inicia uma thread para cada cliente conectado.
+## 🚀 Quick Start
 
-### Cliente
-O arquivo `client.py` conecta-se a um host e porta informados, envia uma requisição e imprime a resposta recebida.
+### 1️⃣ Instalação
 
-## Pré-requisitos
+```bash
+# Clone o repositório
+git clone https://github.com/Marcelo-DevPythonSec23/servidor-client-TCP.git
+cd servidor-client-TCP
 
-- Python 3 instalado
-- acesso a uma rede local ou a um host de destino válido
+# Ambiente virtual (recomendado)
+python -m venv venv
+source venv/bin/activate  # Linux/macOS
+# ou
+venv\Scripts\activate      # Windows
 
-## Como executar
+# Instale dependências
+pip install -r requirements.txt
+```
 
-### 1. Iniciar o servidor
+### 2️⃣ Executar Servidor
 
 ```bash
 python servidor.py
 ```
 
-O servidor ficará aguardando conexões na porta configurada.
+**Saída esperada:**
+```
+2024-01-15 10:30:45 - __main__ - INFO - 🚀 Servidor iniciado em 127.0.0.1:5000
+2024-01-15 10:30:45 - __main__ - INFO - ⏳ Aguardando conexões...
+```
 
-### 2. Executar o cliente
+### 3️⃣ Executar Cliente (outro terminal)
 
 ```bash
 python client.py
 ```
 
-> Ajuste o endereço e a porta conforme o ambiente em que você estiver testando.
-
-## Configuração
-
-No servidor, o endereço e a porta podem ser ajustados nas variáveis:
-
-```python
-IP = "0.0.0.0"
-PORT = 443
+**Saída esperada:**
 ```
-
-No cliente, altere o host e a porta de destino:
-
-```python
-target_host = "127.0.0.1"
-target_port = 443
+2024-01-15 10:30:50 - __main__ - INFO - 🔗 Conectando a 127.0.0.1:5000...
+2024-01-15 10:30:50 - __main__ - INFO - ✅ Conectado a 127.0.0.1:5000
+2024-01-15 10:30:50 - __main__ - INFO - 📤 Enviando mensagem...
+2024-01-15 10:30:50 - __main__ - INFO - 📨 Resposta recebida: ACK
+2024-01-15 10:30:50 - __main__ - INFO - ✅ Teste bem-sucedido!
 ```
-
-Para testes locais, normalmente é mais simples usar `127.0.0.1` e a mesma porta configurada no servidor.
-
-## Exemplo de uso local
-
-1. Configure o servidor para usar a porta `443`;
-2. Inicie o servidor com `python servidor.py`;
-3. Ajuste o cliente para conectar em `127.0.0.1` e porta `443`;
-4. Execute o cliente com `python client.py`;
-5. O servidor deve receber a conexão e responder com `ACK`.
-
-## Observações
-
-- Este é um projeto educacional e de estudo.
-- Não foi desenvolvido para uso em produção.
-- A lógica pode ser expandida para incluir autenticação, envio de mensagens em loop, múltiplos clientes e protocolo personalizado.
-
-## Melhorias futuras
-
-- suporte a múltiplos clientes com fila de mensagens
-- mensagens em formato JSON
-- interface gráfica simples
-- registro de logs
-- tratamento de erros e reconexões
-
-## Licença
-
-Este projeto está disponível para fins educacionais. Sinta-se livre para usá-lo e modificá-lo.
 
 ---
 
-Desenvolvido como um projeto de aprendizado em redes e sockets em Python.
+## 📊 Como Funciona
+
+### Fluxo de Comunicação
+
+```
+Servidor                                Cliente
+   │                                       │
+   │◄─────── CONNECT ────────────────────│
+   │                                       │
+   ├─ ACCEPT                               │
+   ├─ CREATE THREAD                        │
+   │                                       │
+   │────── CONNECTION OK ──────────────►│
+   │                                       │
+   │◄───── SEND MESSAGE ──────────────────│
+   │                                       │
+   │────── SEND ACK ───────────────────►│
+   │                                       │
+   │◄───── CLOSE ───────────────────────│
+   │                                       │
+   └─ THREAD ENDS                         │
+```
+
+### Servidor (`servidor.py`)
+1. Cria socket TCP na porta 5000
+2. Escuta conexões simultâneas
+3. Para cada cliente: cria uma thread
+4. Recebe mensagem e responde com ACK
+5. Logging estruturado de todas as operações
+
+### Cliente (`client.py`)
+1. Conecta ao servidor
+2. Envia mensagem
+3. Recebe resposta (ACK)
+4. Fecha conexão
+5. Logging com tratamento de erros
+
+---
+
+## ⚙️ Configuração
+
+Arquivo **`config.py`**:
+
+```python
+SERVER_HOST = "127.0.0.1"    # localhost ou 0.0.0.0 para rede
+SERVER_PORT = 5000            # Porta sem permissões elevadas
+BUFFER_SIZE = 1024
+CONNECTION_TIMEOUT = 5        # segundos
+```
+
+**Mudar configuração:**
+```python
+# Para testar em rede:
+SERVER_HOST = "0.0.0.0"
+
+# Para porta customizada:
+SERVER_PORT = 9999
+```
+
+---
+
+## 🧪 Testes
+
+```bash
+# Rodar testes
+pytest test_tcp.py -v
+
+# Com cobertura
+pytest test_tcp.py --cov=. --cov-report=term-only
+```
+
+---
+
+## 📝 Logging
+
+Logs em arquivo (`servidor.log`) e console:
+
+```
+2024-01-15 10:30:45 - INFO - ✅ Cliente conectado: 127.0.0.1:54321
+2024-01-15 10:30:50 - INFO - 📨 Dados recebidos: Ola servidor!
+2024-01-15 10:30:50 - INFO - 📤 ACK enviado
+2024-01-15 10:30:51 - INFO - 🔌 Cliente desconectado
+```
+
+---
+
+## 🔒 Tratamento de Erros
+
+| Cenário | Tratamento |
+|---|---|
+| Porta já em uso | Mensagem informativa |
+| Timeout | Reconexão automática |
+| Conexão recusada | Instruções para iniciar servidor |
+| Host inválido | Erro com hostname |
+| Socket fechado | Limpeza segura |
+
+---
+
+## 🚀 Melhorias Implementadas
+
+✅ Corrigidos:
+- Typo em client.py (ltarget_port)
+- Porta 443 → 5000
+- Falta de error handling
+- Sem logging
+
+✨ Adicionados:
+- Logging estruturado
+- Testes com pytest
+- Suporte multi-cliente
+- Config centralizado
+- .gitignore e requirements.txt
+
+---
+
+## 💡 Exemplos Avançados
+
+### Múltiplas Mensagens
+```python
+# Em client.py
+for msg in [b"Msg1", b"Msg2", b"Msg3"]:
+    connect_to_server(SERVER_HOST, SERVER_PORT, msg)
+```
+
+### Testar Múltiplas Conexões
+```bash
+for i in {1..5}; do python client.py & done
+```
+
+---
+
+## 🐛 Troubleshooting
+
+| Problema | Solução |
+|---|---|
+| Porta já em uso | Mude SERVER_PORT em config.py |
+| Conexão recusada | Inicie o servidor primeiro |
+| ModuleNotFoundError | Certifique cd no diretório certo |
+| Timeout | Aumente CONNECTION_TIMEOUT |
+
+---
+
+## 📄 Licença
+
+MIT License - Livre para usar e modificar
+
+---
+
+**Status**: ✅ Operacional e Testado  
+**Versão**: 1.1  
+**Python**: 3.8+
